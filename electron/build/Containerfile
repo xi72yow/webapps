@@ -1,0 +1,16 @@
+# TODO: auf sha256-digest pinnen, sobald der build stabil laeuft
+FROM node:24-slim
+
+# electron-builder braucht fakeroot und dpkg fuer den deb-bau,
+# binutils (ar) und xz-utils, weil fpm das control-archiv als tar -J packt,
+# python3 fuer node-gyp beim install der build-deps
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        binutils \
+        ca-certificates \
+        dpkg \
+        fakeroot \
+        python3 \
+        xz-utils \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /src

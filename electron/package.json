@@ -1,0 +1,48 @@
+{
+  "name": "teams",
+  "productName": "Teams",
+  "version": "0.1.3",
+  "description": "Minimaler Electron-Wrapper fuer Microsoft Teams Web",
+  "main": "src/main.js",
+  "desktopName": "teams.desktop",
+  "private": true,
+  "license": "UNLICENSED",
+  "author": "xi72yow <xi72yow@github.com>",
+  "homepage": "https://github.com/xi72yow/webapps",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xi72yow/webapps.git"
+  },
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --linux deb"
+  },
+  "devDependencies": {
+    "electron": "^42.7.1",
+    "electron-builder": "^26.0.0"
+  },
+  "build": {
+    "appId": "de.xi72yow.teams",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "linux": {
+      "target": [
+        "deb"
+      ],
+      "executableName": "teams",
+      "category": "Network;InstantMessaging",
+      "maintainer": "xi72yow <xi72yow@github.com>",
+      "syncDesktopName": true
+    },
+    "deb": {
+      "afterInstall": "build/postinst.sh",
+      "afterRemove": "build/postrm.sh"
+    }
+  }
+}

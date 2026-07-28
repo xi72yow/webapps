@@ -1,0 +1,12 @@
+version: 2
+updates:
+  # electron is chromium, so this is the cve treadmill for the shipped runtime
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
