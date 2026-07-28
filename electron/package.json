@@ -15,7 +15,7 @@
   },
   "scripts": {
     "start": "electron .",
-    "dist": "electron-builder --linux deb"
+    "dist": "electron-builder --linux deb --publish never"
   },
   "devDependencies": {
     "electron": "^42.7.1",
