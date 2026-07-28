@@ -18,6 +18,8 @@ case "$TARGET" in
     bash "$ROOT_DIR/scripts/build-electron.sh"
     ;;
   all)
+    # a full run starts clean, otherwise older versions linger in the apt pool
+    rm -rf "$ROOT_DIR/dist"
     bash "$ROOT_DIR/scripts/build-chrome.sh"
     bash "$ROOT_DIR/scripts/build-electron.sh"
     ;;

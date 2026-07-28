@@ -16,6 +16,11 @@ permissions:
   pages: write
   id-token: write
 
+# every package version gets '+<run_number>' appended, so a manual run always
+# outranks the previous one in APT without editing any version by hand
+env:
+  BUILD_NUMBER: ${{ github.run_number }}
+
 jobs:
   chrome-apps:
     name: Build Chrome app launchers
@@ -58,7 +63,9 @@ jobs:
         run: npm ci
 
       - name: Build package
-        run: npm run dist
+        run: |
+          BASE=$(node -p "require('./package.json').version")
+          npm run dist -- --config.extraMetadata.version="${BASE}+${BUILD_NUMBER}"
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -69,7 +76,9 @@ jobs:
   release:
     name: Create GitHub release
     needs: [chrome-apps, electron]
-    if: startsWith(github.ref, 'refs/tags/')
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     steps:
       - name: Download all artifacts
@@ -84,6 +93,10 @@ jobs:
       - name: Create release
         uses: softprops/action-gh-release@v2
         with:
+          # a manual run has no tag, so the run number names the release
+          tag_name: >-
+            ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name ||
+            format('build-{0}', github.run_number) }}
           files: |
             artifacts/*.deb
             artifacts/SHA256SUMS
@@ -94,7 +107,9 @@ jobs:
   apt-repo:
     name: Build APT repository
     needs: [chrome-apps, electron]
-    if: startsWith(github.ref, 'refs/tags/')
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -121,7 +136,6 @@ jobs:
   deploy-pages:
     name: Deploy to GitHub Pages
     needs: [apt-repo]
-    if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     environment:
       name: github-pages

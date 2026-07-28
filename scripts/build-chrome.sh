@@ -29,6 +29,9 @@ build_app() {
   icon_ext=$(jq -r ".[$index].icon_ext" "$APPS_JSON")
   categories=$(jq -r ".[$index].categories" "$APPS_JSON")
   version=$(jq -r ".[$index].version" "$APPS_JSON")
+  # ci appends the run number so every release outranks the previous one
+  # without anyone editing apps.json. '+' keeps dpkg ordering intact
+  [ -n "${BUILD_NUMBER:-}" ] && version="${version}+${BUILD_NUMBER}"
 
   # chrome derives WM_CLASS as chrome-{domain}__{path}-Default, slashes become underscores
   domain=$(echo "$url" | sed -E 's|https?://([^/]+).*|\1|')

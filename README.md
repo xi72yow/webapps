@@ -161,21 +161,33 @@ binaries are cached in `.cache/` so repeat builds are fast.
 
 ## Releasing
 
-`.github/workflows/build.yml` builds both backends on every push and pull request. Tagging
-additionally publishes.
+`.github/workflows/build.yml` builds both backends on every push and pull request. Publishing
+happens on a **manual run** (Actions, Build, Run workflow) and on a pushed `v*.*.*` tag.
 
-1. Bump the version of whatever changed: the entry in `apps.json`, or `electron/package.json`
-2. Commit, tag, push the tag
+There is no version to bump by hand. Every package version gets `+<run_number>` appended during
+the build, so each run automatically outranks the previous one:
 
-```bash
-git tag v1.2.0 && git push origin v1.2.0
+```
+apps.json says 1.1.0   ->  outlook-desktop_1.1.0+43_all.deb
+package.json says 0.1.3 -> teams_0.1.3+43_amd64.deb
 ```
 
-On a tag the workflow creates a GitHub release with every `.deb` and a `SHA256SUMS`, rebuilds the
-APT repository via `scripts/update-apt-repo.sh` and deploys it to GitHub Pages.
+`+` is deliberate. `dpkg --compare-versions` orders `1.1.0+43` above `1.1.0+42` and above plain
+`1.1.0`, and it stays valid semver, which a `-43` suffix would not: semver reads that as a
+prerelease, ranking it *below* `1.1.0`.
 
-The repo tag is only a release marker. Package versions are per package, so bumping the tag alone
-changes nothing for APT.
+The base versions in `apps.json` and `electron/package.json` are still yours to raise whenever a
+change deserves a real version bump. They are just no longer required for APT to see an update.
+
+A publishing run creates a GitHub release with every `.deb` and a `SHA256SUMS`, rebuilds the APT
+repository via `scripts/update-apt-repo.sh` and deploys it to GitHub Pages. Manual runs name the
+release `build-<run_number>`, tagged runs use the tag.
+
+Locally the suffix is absent unless you ask for it:
+
+```bash
+BUILD_NUMBER=43 ./build.sh
+```
 
 Required repository setup:
 
