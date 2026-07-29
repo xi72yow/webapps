@@ -1,7 +1,7 @@
 {
   "name": "teams",
   "productName": "Teams",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "description": "Minimaler Electron-Wrapper fuer Microsoft Teams Web",
   "main": "src/main.js",
   "desktopName": "teams.desktop",
@@ -40,6 +40,12 @@
       "maintainer": "xi72yow <xi72yow@github.com>",
       "syncDesktopName": true
     },
+    "extraFiles": [
+      {
+        "from": "../icons/LICENSE.tabler",
+        "to": "LICENSE.tabler"
+      }
+    ],
     "deb": {
       "afterInstall": "build/postinst.sh",
       "afterRemove": "build/postrm.sh"

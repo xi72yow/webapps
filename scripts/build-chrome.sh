@@ -19,14 +19,12 @@ mkdir -p "$OUT_DIR"
 
 build_app() {
   local index="$1"
-  local name display_name url icon_url icon_ext categories version
-  local domain path wm_class icon_dir icon_path pkg_dir
+  local name display_name url categories version
+  local domain path wm_class pkg_dir
 
   name=$(jq -r ".[$index].name" "$APPS_JSON")
   display_name=$(jq -r ".[$index].display_name" "$APPS_JSON")
   url=$(jq -r ".[$index].url" "$APPS_JSON")
-  icon_url=$(jq -r ".[$index].icon_url" "$APPS_JSON")
-  icon_ext=$(jq -r ".[$index].icon_ext" "$APPS_JSON")
   categories=$(jq -r ".[$index].categories" "$APPS_JSON")
   version=$(jq -r ".[$index].version" "$APPS_JSON")
   # ci appends the run number so every release outranks the previous one
@@ -39,18 +37,19 @@ build_app() {
   wm_class="chrome-${domain}__${path}-Default"
   pkg_dir="$WORK_DIR/$name"
 
-  if [ "$icon_ext" = "svg" ]; then
-    icon_dir="/usr/share/icons/hicolor/scalable/apps"
-    icon_path="${icon_dir}/${name}.svg"
-  else
-    icon_dir="/usr/share/icons/hicolor/256x256/apps"
-    icon_path="${icon_dir}/${name}.png"
-  fi
-
   echo "Building $display_name ($version)..."
 
   rm -rf "$pkg_dir"
-  mkdir -p "$pkg_dir/DEBIAN" "$pkg_dir/usr/share/applications"
+  mkdir -p "$pkg_dir/DEBIAN" "$pkg_dir/usr/share/applications" \
+           "$pkg_dir/usr/share/icons/hicolor/scalable/apps" \
+           "$pkg_dir/usr/share/doc/${name}-desktop"
+
+  cp "$ROOT_DIR/icons/${name}.svg" \
+     "$pkg_dir/usr/share/icons/hicolor/scalable/apps/${name}.svg"
+  # the icons are derived from tabler icons, whose mit license asks for the
+  # notice to travel with them
+  cp "$ROOT_DIR/icons/LICENSE.tabler" \
+     "$pkg_dir/usr/share/doc/${name}-desktop/copyright"
 
   cat > "$pkg_dir/DEBIAN/control" << EOF
 Package: ${name}-desktop
@@ -62,22 +61,15 @@ Depends: google-chrome-stable
 Maintainer: xi72yow <xi72yow@github.com>
 Description: ${display_name} Desktop App
  Launches ${display_name} as a standalone Chrome App window.
- The icon is downloaded during installation.
 EOF
 
-  # the app logos are third-party trademarks, so they are fetched at install
-  # time instead of being stored in this repo
+  # up to 1.1.0 the postinst downloaded the vendor logo into /usr/share. that
+  # copy is not tracked by dpkg, so it would linger and shadow the shipped icon
   cat > "$pkg_dir/DEBIAN/postinst" << EOF
 #!/bin/bash
 set -e
 
-mkdir -p "$icon_dir"
-
-if command -v curl >/dev/null 2>&1; then
-    curl -sfL "$icon_url" -o "$icon_path" || true
-elif command -v wget >/dev/null 2>&1; then
-    wget -qO "$icon_path" "$icon_url" || true
-fi
+rm -f "/usr/share/icons/hicolor/256x256/apps/${name}.png"
 
 if command -v gtk-update-icon-cache >/dev/null 2>&1; then
     gtk-update-icon-cache -f /usr/share/icons/hicolor/ || true
@@ -88,11 +80,8 @@ EOF
 #!/bin/bash
 set -e
 
-if [ "\$1" = "remove" ] || [ "\$1" = "purge" ]; then
-    rm -f "$icon_path"
-    if command -v gtk-update-icon-cache >/dev/null 2>&1; then
-        gtk-update-icon-cache -f /usr/share/icons/hicolor/ || true
-    fi
+if command -v gtk-update-icon-cache >/dev/null 2>&1; then
+    gtk-update-icon-cache -f /usr/share/icons/hicolor/ || true
 fi
 EOF
 

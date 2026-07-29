@@ -25,11 +25,13 @@ fi
 podman build -t "$IMAGE" -f "$APP_DIR/build/Containerfile" "$APP_DIR/build/"
 
 # electron and electron-builder pull binaries, so the caches are persisted
+# the repo root is mounted, not just electron/, because extraFiles pulls the
+# tabler license from ../icons
 podman run --rm \
-    -v "$APP_DIR":/src:Z \
+    -v "$ROOT_DIR":/src:Z \
     -v "$ROOT_DIR/.cache/electron":/root/.cache/electron:Z \
     -v "$ROOT_DIR/.cache/electron-builder":/root/.cache/electron-builder:Z \
-    -w /src \
+    -w /src/electron \
     "$IMAGE" \
     bash -c "npm install && npm run dist $DIST_ARGS"
 

@@ -40,18 +40,29 @@ Append an entry to `apps.json`:
   "name": "outlook",
   "display_name": "Outlook",
   "url": "https://outlook.office.com/mail/",
-  "icon_url": "https://…/favicon.png",
-  "icon_ext": "png",
+  "icon": "brand-office",
+  "color": "#0078d4",
   "categories": "Network;Email;",
-  "version": "1.1.0"
+  "version": "1.2.0"
 }
 ```
 
-Then `./build.sh chrome outlook`. `StartupWMClass` is derived from the URL the same way Chrome
-derives it, so GNOME associates the window with the launcher.
+Then `./scripts/make-icons.sh` followed by `./build.sh chrome outlook`. `StartupWMClass` is derived
+from the URL the same way Chrome derives it, so GNOME associates the window with the launcher.
 
-App logos are third-party trademarks and are therefore not stored in this repo. Each package
-fetches its icon from `icon_url` in `postinst`.
+## Icons
+
+The packages do not use the vendor logos. Those are third-party trademarks, so neither this repo
+nor the packages may carry them. Instead `scripts/make-icons.sh` renders one icon per app from
+[Tabler Icons](https://tabler.io/icons) (MIT): `icon` picks the glyph, `color` the tile behind it.
+
+Until 1.1.0 the real logos were downloaded by `postinst`. That fails silently whenever PackageKit
+applies an update offline during boot, because there is no network yet, and the app is then left
+without an icon until the next reinstall.
+
+The results live in `icons/` and are committed, so a build needs neither network nor the script.
+Re-run it after changing `icon` or `color`; it also renders `electron/build/icon.png`, which
+electron-builder needs as a PNG.
 
 Bump `version` on an entry whenever you change it, otherwise APT sees no update.
 
@@ -216,7 +227,7 @@ Electron is Chromium, so the Chromium CVE cadence applies to the `teams` package
 and for the Actions.
 
 The Chrome launchers carry no runtime of their own, they inherit whatever Chrome is installed, and
-need no maintenance beyond a URL or icon changing upstream.
+need no maintenance beyond a URL changing upstream.
 
 ## Verifying an encoder problem in a call
 

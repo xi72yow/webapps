@@ -3,99 +3,99 @@
     "name": "netflix",
     "display_name": "Netflix",
     "url": "https://www.netflix.com",
-    "icon_url": "https://assets.nflxext.com/us/ffe/siteui/common/icons/nficon2016.png",
-    "icon_ext": "png",
+    "icon": "brand-netflix",
+    "color": "#e50914",
     "categories": "AudioVideo;Video;",
-    "version": "1.1.0"
+    "version": "1.2.0"
   },
   {
     "name": "youtube",
     "display_name": "YouTube",
     "url": "https://www.youtube.com",
-    "icon_url": "https://music.youtube.com/img/favicon_144.png",
-    "icon_ext": "png",
+    "icon": "brand-youtube",
+    "color": "#ff0000",
     "categories": "AudioVideo;Video;",
-    "version": "1.1.0"
+    "version": "1.2.0"
   },
   {
     "name": "youtube-music",
     "display_name": "YouTube Music",
     "url": "https://music.youtube.com",
-    "icon_url": "https://music.youtube.com/img/favicon_144.png",
-    "icon_ext": "png",
+    "icon": "music",
+    "color": "#ff0000",
     "categories": "AudioVideo;Audio;",
-    "version": "1.1.0"
+    "version": "1.2.0"
   },
   {
     "name": "outlook",
     "display_name": "Outlook",
     "url": "https://outlook.office.com/mail",
-    "icon_url": "https://res-1.cdn.office.net/files/fabric-cdn-prod_20230815.002/assets/brand-icons/product/svg/outlook_48x1.svg",
-    "icon_ext": "svg",
+    "icon": "brand-office",
+    "color": "#0078d4",
     "categories": "Network;Email;",
-    "version": "1.1.0"
+    "version": "1.2.0"
   },
   {
     "name": "supabase",
     "display_name": "Supabase",
     "url": "https://supabase.com/dashboard",
-    "icon_url": "https://supabase.com/favicon/favicon-196x196.png",
-    "icon_ext": "png",
+    "icon": "brand-supabase",
+    "color": "#3ecf8e",
     "categories": "Development;",
-    "version": "1.1.0"
+    "version": "1.2.0"
   },
   {
     "name": "mattermost",
     "display_name": "Mattermost",
     "url": "https://mattermost-xwc044ook44sg8480cwccg4c.cluster.xi72yow.de",
-    "icon_url": "https://mattermost.com/wp-content/themes/mattermost-2021/frontend/dist/img/favicon/v2/apple-touch-icon.png",
-    "icon_ext": "png",
+    "icon": "messages",
+    "color": "#1e325c",
     "categories": "Network;Chat;",
-    "version": "1.1.0"
+    "version": "1.2.0"
   },
   {
     "name": "element",
     "display_name": "Element",
     "url": "https://app.element.io",
-    "icon_url": "https://app.element.io/vector-icons/512.png",
-    "icon_ext": "png",
+    "icon": "brand-matrix",
+    "color": "#0dbd8b",
     "categories": "Network;Chat;",
-    "version": "1.1.0"
+    "version": "1.2.0"
   },
   {
     "name": "claude",
     "display_name": "Claude",
     "url": "https://claude.ai",
-    "icon_url": "https://claude.ai/apple-touch-icon.png",
-    "icon_ext": "png",
+    "icon": "sparkles",
+    "color": "#d97757",
     "categories": "Development;",
-    "version": "1.1.0"
+    "version": "1.2.0"
   },
   {
     "name": "drawio",
     "display_name": "draw.io",
     "url": "https://app.diagrams.net",
-    "icon_url": "https://app.diagrams.net/images/drawlogo256.png",
-    "icon_ext": "png",
+    "icon": "sitemap",
+    "color": "#f08705",
     "categories": "Graphics;Development;",
-    "version": "1.1.0"
+    "version": "1.2.0"
   },
   {
     "name": "spotify",
     "display_name": "Spotify",
     "url": "https://open.spotify.com",
-    "icon_url": "https://storage.googleapis.com/pr-newsroom-wp/1/2023/05/Spotify_Primary_Logo_RGB_Green.png",
-    "icon_ext": "png",
+    "icon": "brand-spotify",
+    "color": "#1db954",
     "categories": "AudioVideo;Audio;",
-    "version": "1.1.0"
+    "version": "1.2.0"
   },
   {
     "name": "languagetool",
     "display_name": "LanguageTool",
     "url": "https://languagetool.org/editor",
-    "icon_url": "https://languagetool.org/images/favicons/apple-touch-icon-180x180.png",
-    "icon_ext": "png",
+    "icon": "text-spellcheck",
+    "color": "#2b6cb0",
     "categories": "Office;TextEditor;",
-    "version": "1.1.0"
+    "version": "1.2.0"
   }
 ]
