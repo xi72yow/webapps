@@ -35,7 +35,7 @@ jobs:
         run: bash scripts/build-chrome.sh
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: chrome-debs
           path: dist/*.deb
@@ -68,7 +68,7 @@ jobs:
           npm run dist -- --config.extraMetadata.version="${BASE}+${BUILD_NUMBER}"
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: electron-debs
           path: electron/dist/*.deb
